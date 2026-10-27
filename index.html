@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f3eee1">
+<title>El Squeako — a tiny tragic concerto</title>
+<style>
+:root{color-scheme:light;--ink:#273c3b;--paper:#f3eee1;--ochre:#e6b94f}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Georgia,serif;min-height:100svh;display:grid;place-items:center}main{width:min(94%,760px);text-align:center;padding:36px 18px}.edition{font:11px/1.5 system-ui,sans-serif;letter-spacing:.24em;text-transform:uppercase}h1{font-size:clamp(48px,10vw,84px);font-weight:normal;letter-spacing:-.055em;margin:14px 0 10px}h1 i{color:#9b543a}p{line-height:1.6}.subtitle{max-width:360px;margin:auto;font-style:italic;font-size:18px}.stage{margin:22px auto 0;max-width:510px;border-bottom:1px solid #c9c6b6;background:radial-gradient(ellipse at center,#e0e8df88,transparent 68%)}svg{display:block;width:100%;height:auto}.wiper{transform-box:fill-box;transform-origin:50% 96%;transform:rotate(-38deg)}.rain{opacity:.5}.caption{min-height:2em;font-style:italic;font-size:18px;margin:20px 0}.controls{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}button{font:600 14px system-ui,sans-serif;padding:13px 23px;border:1px solid var(--ink);border-radius:999px;background:var(--ink);color:var(--paper);cursor:pointer}button.secondary{background:transparent;color:var(--ink)}button:hover{box-shadow:0 3px 0 #bdc2b8}button:focus-visible,a:focus-visible{outline:3px solid #a04f33;outline-offset:5px}.fine{font:12px/1.8 system-ui,sans-serif;color:#5d6c65;margin-top:22px}a{color:inherit}footer{margin-top:35px;font:10px system-ui,sans-serif;letter-spacing:.17em;text-transform:uppercase}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}.rain{display:none}}
+</style>
+</head>
+<body>
+<main>
+<div class="edition">An entirely unnecessary invention · Op. 001</div>
+<h1>El <i>Squeako</i></h1>
+<p class="subtitle">tiny tragic concerto for a mechanism that should never have been installed</p>
+<div class="stage">
+<svg viewBox="0 0 510 310" role="img" aria-labelledby="portrait-title portrait-desc">
+<title id="portrait-title">El Squeako</title><desc id="portrait-desc">A solemn little stone wearing sunglasses and a mustard raincoat. One tiny windscreen wiper has been installed on the glasses, against all advice.</desc>
+<g class="rain" stroke="#8ea7a1" stroke-width="2" stroke-linecap="round"><path d="M104 38l-5 14m67-24l-5 14m171-3l-5 14m76 10l-5 14M71 112l-5 14m370-5l-5 14M130 87l-5 14m244-8l-5 14"/></g>
+<ellipse cx="255" cy="283" rx="109" ry="11" fill="#273c3b" opacity=".1"/>
+<path d="M207 267l-7 17h32l4-17m39 0l3 17h32l-8-17" fill="#334643"/>
+<path d="M205 170Q167 186 157 257l41 10 10-26-2 36h101l-2-36 10 26 38-10q-11-70-47-87z" fill="#e6b94f" stroke="#334643" stroke-width="3" stroke-linejoin="round"/>
+<path d="M244 192l11 23 16-23m-16 23v61" fill="none" stroke="#a17a30" stroke-width="2"/><circle cx="263" cy="238" r="2" fill="#334643"/><circle cx="263" cy="258" r="2" fill="#334643"/>
+<path d="M182 135q-5-75 66-85 67-10 82 67 20 81-61 88-80 6-87-70" fill="#a8b1a7" stroke="#334643" stroke-width="3"/>
+<path d="M200 98q6-25 27-30m76 82l5 10" stroke="#cdd2c7" stroke-width="5" stroke-linecap="round" fill="none"/>
+<path d="M181 119l151-2" stroke="#253a37" stroke-width="7"/>
+<path d="M190 116h56l-4 35q-27 20-47-3zm78 0h55l-5 32q-24 22-46 3z" fill="#233632" stroke="#233632" stroke-width="7" stroke-linejoin="round"/>
+<path d="M246 125q11-8 23 0" stroke="#233632" stroke-width="6" fill="none"/>
+<path d="M204 125h24m55 0h23" stroke="#75918b" stroke-width="3" opacity=".65"/>
+<path d="M244 178q13-5 25 0" fill="none" stroke="#3e5148" stroke-width="2" stroke-linecap="round"/>
+<g class="wiper" id="wiper" stroke="#e9e6d8" stroke-linecap="round"><path d="M244 153v-33" stroke-width="3"/><path d="M232 119h24" stroke-width="5"/><circle cx="244" cy="153" r="4" fill="#9b543a" stroke="none"/></g>
+<path d="M192 195l29 17 22-12m28 0l21 12 26-17" fill="none" stroke="#a17a30" stroke-width="2"/>
+</svg>
+</div>
+<p class="caption" id="status" role="status" aria-live="polite">A small stone. A grave engineering error.</p>
+<div class="controls"><button id="play" type="button" aria-pressed="false">Begin the ordeal</button><button id="mute" class="secondary" type="button" aria-pressed="false">Mute sound</button></div>
+<p class="fine">Start with your volume low. Six gentle squeaks. One pointed silence.<br><a href="preview.wav" download>Take the 16-second recording home ↓</a></p>
+<noscript><p>The live performance needs JavaScript. The recording above does not.</p></noscript>
+<footer>Rubber · stone · unreasonable dignity</footer>
+</main>
+<script>
+'use strict';
+const score = [[0.8,1.65,293.66,349.23],[2.65,1.25,349.23,329.63],[4.15,1.85,329.63,220],[9,2,220,293.66],[11.3,1.5,261.63,246.94],[13,2.2,246.94,220]];
+const play=document.querySelector('#play'), mute=document.querySelector('#mute'), status=document.querySelector('#status'), wiper=document.querySelector('#wiper');
+const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+let ctx, master, source, running=false, muted=false, frame=0, origin=0;
+// Render a tiny original score into a buffer: curved glissandi, friction flutter,
+// soft harmonics, and sine-power envelopes. No files or services are fetched.
+function compose(){
+ const buffer=ctx.createBuffer(1,ctx.sampleRate*16,ctx.sampleRate), data=buffer.getChannelData(0), rate=ctx.sampleRate;
+ for(const [start,duration,low,high] of score){
+  let phase=0;
+  for(let j=0;j<Math.round(duration*rate);j++){
+   const t=j/rate,u=t/duration;
+   const f=(low+(high-low)*(.5-.5*Math.cos(Math.PI*u)))*(1+.018*Math.sin(2*Math.PI*5.3*t));
+   phase+=2*Math.PI*f/rate;
+   data[Math.round(start*rate)+j]+=.115*Math.sin(Math.PI*u)**1.6*(.74+.26*Math.sin(2*Math.PI*13*t)**2)*(Math.sin(phase)+.24*Math.sin(2*phase+.7)+.09*Math.sin(3*phase));
+  }
+ }
+ return buffer;
+}
+function say(text){if(status.textContent!==text)status.textContent=text;}
+function animate(){
+ if(!running)return;
+ const t=ctx.currentTime-origin;
+ say(t<.8?'He has read the forecast.':t<6.1?'I. A reluctant clearing of the lens.':t<9?'II. A silence with a formal complaint attached.':t<15.3?'III. The return. With absolutely no loss of dignity.':'The weather remains unimpressed.');
+ let angle=-38;
+ if(t>=6.1&&t<9)angle=38;
+ for(let i=0;i<score.length;i++){
+  const [start,duration]=score[i];
+  if(t>=start&&t<=start+duration){const u=(t-start)/duration;angle=i<3?-38+76*(i+u)/3:38-76*(i-3+u)/3;break;}
+  if(t>start+duration)angle=i<3?-38+76*(i+1)/3:38-76*(i-2)/3;
+ }
+ wiper.style.transform=`rotate(${reduced.matches?-38:angle}deg)`;
+ frame=requestAnimationFrame(animate);
+}
+function stop(finished=false){
+ running=false;cancelAnimationFrame(frame);
+ if(source){const old=source;source=null;const oldMaster=master;old.onended=()=>oldMaster.disconnect();master.gain.setTargetAtTime(0,ctx.currentTime,.015);try{old.stop(ctx.currentTime+.08);}catch{} }
+ play.textContent='Encore, reluctantly';play.setAttribute('aria-pressed','false');wiper.style.transform='rotate(-38deg)';
+ say(finished?'The weather remains unimpressed.':'Performance suspended. Dignity intact.');
+}
+play.addEventListener('click',async()=>{
+ if(running){stop();return;}
+ play.disabled=true;
+ try{
+  ctx??=new (window.AudioContext||window.webkitAudioContext)();await ctx.resume();
+  master=ctx.createGain();master.gain.value=muted?0:.65;master.connect(ctx.destination);
+  source=ctx.createBufferSource();source.buffer=compose();source.connect(master);
+  const thisMaster=master;source.onended=()=>{stop(true);thisMaster.disconnect();};
+  origin=ctx.currentTime;running=true;source.start(origin);play.textContent='Stop the ordeal';play.setAttribute('aria-pressed','true');animate();
+ }catch(error){say('The mechanism declined. Try the downloadable recording.');running=false;}
+ finally{play.disabled=false;}
+});
+mute.addEventListener('click',()=>{muted=!muted;mute.textContent=muted?'Unmute sound':'Mute sound';mute.setAttribute('aria-pressed',String(muted));if(master)master.gain.setTargetAtTime(muted?0:.65,ctx.currentTime,.025);});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&running)stop();});
+</script>
+</body>
+</html>
