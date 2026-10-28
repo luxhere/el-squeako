@@ -35,19 +35,19 @@
 </div>
 <p class="caption" id="status" role="status" aria-live="polite">A small stone. A grave engineering error.</p>
 <div class="controls"><button id="play" type="button" aria-pressed="false">Begin the ordeal</button><button id="mute" class="secondary" type="button" aria-pressed="false">Mute sound</button></div>
-<p class="fine">Start with your volume low. Seventeen uneven squeaks. One pointed silence.<br><a href="preview-v2.wav" download>Take the 16-second recording home ↓</a></p>
+<p class="fine">Start with your volume low. Seventeen uneven squeaks. One pointed silence.<br><a href="preview-v3.wav" download>Take the 16-second recording home ↓</a></p>
 <noscript><p>The live performance needs JavaScript. The recording above does not.</p></noscript>
 <footer>Rubber · stone · unreasonable dignity</footer>
 </main>
 <script>
 'use strict';
-const score = [[0.6,0.09,620,1150],[0.72,0.06,700,1280],[0.84,0.12,580,1050],[1.6,0.07,760,1340],[1.71,0.05,900,1480],[2.45,0.14,540,980],[3.1,0.06,820,1390],[3.2,0.05,700,1210],[4.05,0.1,640,1170],[4.7,0.06,880,1420],[4.8,0.08,750,1250],[5.55,0.13,560,990],[9.6,0.1,700,1300],[10.45,0.07,850,1450],[11.6,0.09,660,1240],[12.9,0.06,940,1490],[14.1,0.11,600,1120]];
+const score = [[0.6,0.09,620,1150],[0.72,0.06,700,1280],[0.84,0.12,580,1050],[1.6,0.07,760,1340],[1.71,0.05,900,1480],[2.45,0.42,520,980],[3.1,0.06,820,1390],[3.2,0.05,700,1210],[4.05,0.1,640,1170],[4.7,0.06,880,1420],[4.8,0.08,750,1250],[5.55,0.13,560,990],[9.6,0.1,700,1300],[10.45,0.07,850,1450],[11.6,0.09,660,1240],[12.9,0.06,940,1490],[14.1,0.55,600,1150]];
 const play=document.querySelector('#play'), mute=document.querySelector('#mute'), status=document.querySelector('#status'), wiper=document.querySelector('#wiper');
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 let ctx, master, source, running=false, muted=false, frame=0, origin=0;
 // Render a tiny original score into a buffer: stick-slip chirps with fast
 // glides, 4ms attack, chatter friction, and a fixed-seed rasp. Mirrors
-// render_squeako.py's take two. No files or services are fetched.
+// render_squeako.py's take three. No files or services are fetched.
 function compose(){
  const buffer=ctx.createBuffer(1,ctx.sampleRate*16,ctx.sampleRate), data=buffer.getChannelData(0), rate=ctx.sampleRate;
  let state=12345, y=0;

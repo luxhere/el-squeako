@@ -45,15 +45,16 @@ uneven chirps in bursts (the blade catches, tension rises, it lets go), an
 indignant silence, then single decisive strokes on the way back. Higher, dryer,
 shorter than the ghost motif: friction, not lament.
 
-Take one (`preview.wav`) is preserved as recorded. Take two won its verdict and
-now plays in the browser page; the download link serves `preview-v2.wav`.
+Take one (`preview.wav`) is preserved as recorded, and take two
+(`preview-v2.wav`) likewise. Take three won the second verdict: chitter,
+chitter, long-swipe. It now plays in the browser page, and the download link
+serves `preview-v3.wav`.
 
 ## Take three: preview-v3.wav
 
 Take three keeps take two's chatter and pays the long stroke the piece owed:
 the effortful drag mid-burst opens out, and the finale finally lets go. Same
-engine, two gestures widened. It is a candidate for the page until the critic
-weighs in.
+engine, two gestures widened. The page plays it.
 
 Tests check finite samples, conservative peak, silence, smooth sample changes,
 duration/PCM format, deterministic rendering, and a self-contained static page.

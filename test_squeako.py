@@ -38,12 +38,12 @@ class SqueakoTests(unittest.TestCase):
         self.assertIn('prefers-reduced-motion', html)
         self.assertIn('aria-pressed', html)
         self.assertIn('aria-live="polite"', html)
-        for start, duration, low, high in music.SCORE_V2:
+        for start, duration, low, high in music.SCORE_V3:
             self.assertLessEqual(start+duration, music.DURATION)
-        # Both renderers retain the exact same take-two score (seventeen gestures).
+        # Both renderers retain the exact same take-three score (seventeen gestures).
         js_score = re.search(r'const score = (\[.*?\]);', html).group(1)
         import json
-        self.assertEqual(json.loads(js_score), [list(note) for note in music.SCORE_V2])
+        self.assertEqual(json.loads(js_score), [list(note) for note in music.SCORE_V3])
 
 
 class TakeTwoTests(unittest.TestCase):
