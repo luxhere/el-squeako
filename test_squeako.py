@@ -46,5 +46,38 @@ class SqueakoTests(unittest.TestCase):
         self.assertEqual(json.loads(js_score), [list(note) for note in music.SCORE])
 
 
+class TakeTwoTests(unittest.TestCase):
+    """preview.wav (the ghost) stays untouched; v2 is its own artifact."""
+    @classmethod
+    def setUpClass(cls):
+        cls.samples = music.synthesize_v2()
+
+    def test_v2_safe_uneven_and_smooth(self):
+        samples = self.samples
+        self.assertTrue(all(math.isfinite(x) for x in samples))
+        self.assertGreater(max(map(abs, samples)), .05)
+        self.assertLess(max(map(abs, samples)), .17)
+        # Loosest sane bound: 1.5 kHz glides move more per sample than the
+        # ghost's 300 Hz moan. A click would jump near 0.4; this must not.
+        self.assertLess(max(abs(b-a) for a, b in zip(samples, samples[1:])), .15)
+        # Indignant silence intact between the bursts and the dignified return.
+        self.assertTrue(all(x == 0 for x in samples[int(6.2*music.RATE):int(9.2*music.RATE)]))
+
+    def test_v2_score_fits_the_night(self):
+        self.assertTrue(music.SCORE_V2)
+        for start, duration, low, high in music.SCORE_V2:
+            self.assertLessEqual(start + duration, music.DURATION)
+            self.assertLess(low, high)
+            self.assertLess(duration, 0.2)  # chirps, not moans
+
+    def test_v2_preview_file_matches_synthesis(self):
+        with wave.open(str(ROOT / 'preview-v2.wav'), 'rb') as audio:
+            self.assertEqual((audio.getnchannels(), audio.getsampwidth(), audio.getframerate()), (1, 2, music.RATE))
+            self.assertEqual(audio.getnframes()/audio.getframerate(), 16)
+            actual = audio.readframes(audio.getnframes())
+        expected = struct.pack('<'+'h'*len(self.samples), *(round(x*32767) for x in self.samples))
+        self.assertEqual(actual, expected)
+
+
 if __name__ == '__main__':
     unittest.main()

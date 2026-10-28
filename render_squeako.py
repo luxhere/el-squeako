@@ -43,5 +43,75 @@ def render(destination=Path(__file__).with_name('preview.wav')):
     print(f'{Path(destination).name}: {DURATION}s, mono PCM16, peak {max(map(abs, samples)):.3f}')
 
 
+# --- Take two: stick-slip chatter, uneven catches, dignified return. ---
+# time, duration, starting pitch, ending pitch: short rubbery chirps in bursts,
+# an indignant silence, then single decisive strokes. Higher, dryer, shorter
+# than the ghost motif: friction, not lament.
+SCORE_V2 = [
+    (0.60, 0.09, 620, 1150), (0.72, 0.06, 700, 1280), (0.84, 0.12, 580, 1050),
+    (1.60, 0.07, 760, 1340), (1.71, 0.05, 900, 1480),
+    (2.45, 0.14, 540, 980),
+    (3.10, 0.06, 820, 1390), (3.20, 0.05, 700, 1210),
+    (4.05, 0.10, 640, 1170),
+    (4.70, 0.06, 880, 1420), (4.80, 0.08, 750, 1250),
+    (5.55, 0.13, 560, 990),
+    (9.60, 0.10, 700, 1300),
+    (10.45, 0.07, 850, 1450),
+    (11.60, 0.09, 660, 1240),
+    (12.90, 0.06, 940, 1490),
+    (14.10, 0.11, 600, 1120),
+]
+
+
+def _deterministic_noise(size):
+    """Fixed-seed chatter, one-pole smoothed so it rasps instead of clicks."""
+    state = 12345
+    smoothed = []
+    y = 0.0
+    for _ in range(size):
+        state = (1103515245 * state + 12345) & 0x7FFFFFFF
+        n = (state / 0x3FFFFFFF) - 1.0
+        y += 0.18 * (n - y)
+        smoothed.append(y)
+    return smoothed
+
+
+def synthesize_v2():
+    samples = [0.0] * (RATE * DURATION)
+    rasp = _deterministic_noise(len(samples))
+    for start, duration, low, high in SCORE_V2:
+        offset = round(start * RATE)
+        phase = 0.0
+        for j in range(round(duration * RATE)):
+            t = j / RATE
+            u = t / duration
+            # Fast glide: the blade catches, tension rises, it lets go.
+            frequency = low + (high - low) * (u ** 0.7)
+            frequency *= 1 + 0.03 * math.sin(2 * math.pi * 17 * t)
+            phase += 2 * math.pi * frequency / RATE
+            attack = min(t / 0.004, 1.0)
+            release = (1.0 - u) ** 1.5
+            envelope = attack * release
+            friction = 0.65 + 0.35 * abs(math.sin(2 * math.pi * 28 * t))
+            voice = (math.sin(phase) +
+                     0.18 * math.sin(2 * phase) + 0.05 * math.sin(3 * phase))
+            value = (0.12 * envelope * friction * voice +
+                     0.10 * envelope * rasp[offset + j])
+            samples[offset + j] += value
+    assert all(math.isfinite(x) for x in samples)
+    assert max(map(abs, samples)) < 0.17
+    return samples
+
+
+def render_v2(destination=Path(__file__).with_name('preview-v2.wav')):
+    samples = synthesize_v2()
+    pcm = struct.pack('<' + 'h' * len(samples), *(round(x * 32767) for x in samples))
+    with wave.open(str(destination), 'wb') as output:
+        output.setparams((1, 2, RATE, 0, 'NONE', 'not compressed'))
+        output.writeframes(pcm)
+    print(f'{Path(destination).name}: {DURATION}s, mono PCM16, peak {max(map(abs, samples)):.3f}')
+
+
 if __name__ == '__main__':
-    render()
+    import sys
+    render_v2() if '--v2' in sys.argv else render()

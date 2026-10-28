@@ -29,12 +29,23 @@ six-gesture score, curved pitches, soft harmonic friction, and smooth envelopes.
 The browser applies an additional conservative master gain; perceived loudness
 still depends on your equipment. No outside recordings or copyrighted music used.
 
-Regenerate the deterministic recording using only Python's standard library:
+### Regenerate and verify
 
 ```sh
-python3 render_squeako.py
-python3 -m unittest -v
+python3 render_squeako.py     # writes preview.wav (take one: the mournful ghost)
+python3 render_squeako.py --v2 # writes preview-v2.wav (take two: rubber stick-slip)
+python3 -m unittest -v         # six tests: three per take
 ```
+
+## Take two: preview-v2.wav
+
+Take one sounded like a mournful ghost. Take two chases the actual rubber: short
+uneven chirps in bursts (the blade catches, tension rises, it lets go), an
+indignant silence, then single decisive strokes on the way back. Higher, dryer,
+shorter than the ghost motif: friction, not lament.
+
+Take one (`preview.wav`) is preserved as recorded; the browser page still plays
+it until take two earns its place there.
 
 Tests check finite samples, conservative peak, silence, smooth sample changes,
 duration/PCM format, deterministic rendering, and a self-contained static page.
