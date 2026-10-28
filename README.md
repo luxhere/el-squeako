@@ -34,7 +34,8 @@ still depends on your equipment. No outside recordings or copyrighted music used
 ```sh
 python3 render_squeako.py     # writes preview.wav (take one: the mournful ghost)
 python3 render_squeako.py --v2 # writes preview-v2.wav (take two: rubber stick-slip)
-python3 -m unittest -v         # six tests: three per take
+python3 render_squeako.py --v3 # writes preview-v3.wav (take three: the long release)
+python3 -m unittest -v         # eight tests: three each for takes one and two, two for take three
 ```
 
 ## Take two: preview-v2.wav
@@ -44,8 +45,15 @@ uneven chirps in bursts (the blade catches, tension rises, it lets go), an
 indignant silence, then single decisive strokes on the way back. Higher, dryer,
 shorter than the ghost motif: friction, not lament.
 
-Take one (`preview.wav`) is preserved as recorded; the browser page still plays
-it until take two earns its place there.
+Take one (`preview.wav`) is preserved as recorded. Take two won its verdict and
+now plays in the browser page; the download link serves `preview-v2.wav`.
+
+## Take three: preview-v3.wav
+
+Take three keeps take two's chatter and pays the long stroke the piece owed:
+the effortful drag mid-burst opens out, and the finale finally lets go. Same
+engine, two gestures widened. It is a candidate for the page until the critic
+weighs in.
 
 Tests check finite samples, conservative peak, silence, smooth sample changes,
 duration/PCM format, deterministic rendering, and a self-contained static page.

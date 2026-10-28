@@ -38,12 +38,12 @@ class SqueakoTests(unittest.TestCase):
         self.assertIn('prefers-reduced-motion', html)
         self.assertIn('aria-pressed', html)
         self.assertIn('aria-live="polite"', html)
-        for start, duration, low, high in music.SCORE:
+        for start, duration, low, high in music.SCORE_V2:
             self.assertLessEqual(start+duration, music.DURATION)
-        # Both renderers retain the exact same six-gesture score.
+        # Both renderers retain the exact same take-two score (seventeen gestures).
         js_score = re.search(r'const score = (\[.*?\]);', html).group(1)
         import json
-        self.assertEqual(json.loads(js_score), [list(note) for note in music.SCORE])
+        self.assertEqual(json.loads(js_score), [list(note) for note in music.SCORE_V2])
 
 
 class TakeTwoTests(unittest.TestCase):
@@ -72,6 +72,38 @@ class TakeTwoTests(unittest.TestCase):
 
     def test_v2_preview_file_matches_synthesis(self):
         with wave.open(str(ROOT / 'preview-v2.wav'), 'rb') as audio:
+            self.assertEqual((audio.getnchannels(), audio.getsampwidth(), audio.getframerate()), (1, 2, music.RATE))
+            self.assertEqual(audio.getnframes()/audio.getframerate(), 16)
+            actual = audio.readframes(audio.getnframes())
+        expected = struct.pack('<'+'h'*len(self.samples), *(round(x*32767) for x in self.samples))
+        self.assertEqual(actual, expected)
+
+
+class TakeThreeTests(unittest.TestCase):
+    """Take three: take two's chatter plus the long release it owed us."""
+    @classmethod
+    def setUpClass(cls):
+        cls.samples = music.synthesize_v2(music.SCORE_V3)
+
+    def test_v3_keeps_the_chatter_and_pays_the_release(self):
+        samples = self.samples
+        self.assertTrue(all(math.isfinite(x) for x in samples))
+        self.assertGreater(max(map(abs, samples)), .05)
+        self.assertLess(max(map(abs, samples)), .17)
+        self.assertLess(max(abs(b-a) for a, b in zip(samples, samples[1:])), .15)
+        self.assertTrue(all(x == 0 for x in samples[int(6.2*music.RATE):int(9.2*music.RATE)]))
+        # The two widened gestures exist; the chirps survive around them.
+        self.assertGreaterEqual(sum(1 for n in music.SCORE_V3 if n[1] >= .4), 2)
+        self.assertGreaterEqual(sum(1 for n in music.SCORE_V3 if n[1] < .2), 14)
+        # No gesture overlaps another, and all fit the 16 seconds.
+        ordered = sorted(music.SCORE_V3)
+        for (start, duration, _, _), (next_start, _, _, _) in zip(ordered, ordered[1:]):
+            self.assertLessEqual(start + duration, next_start)
+        for start, duration, _, _ in ordered:
+            self.assertLessEqual(start + duration, music.DURATION)
+
+    def test_v3_preview_file_matches_synthesis(self):
+        with wave.open(str(ROOT / 'preview-v3.wav'), 'rb') as audio:
             self.assertEqual((audio.getnchannels(), audio.getsampwidth(), audio.getframerate()), (1, 2, music.RATE))
             self.assertEqual(audio.getnframes()/audio.getframerate(), 16)
             actual = audio.readframes(audio.getnframes())

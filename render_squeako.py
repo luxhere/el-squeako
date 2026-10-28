@@ -76,10 +76,10 @@ def _deterministic_noise(size):
     return smoothed
 
 
-def synthesize_v2():
+def synthesize_v2(score=SCORE_V2):
     samples = [0.0] * (RATE * DURATION)
     rasp = _deterministic_noise(len(samples))
-    for start, duration, low, high in SCORE_V2:
+    for start, duration, low, high in score:
         offset = round(start * RATE)
         phase = 0.0
         for j in range(round(duration * RATE)):
@@ -112,6 +112,39 @@ def render_v2(destination=Path(__file__).with_name('preview-v2.wav')):
     print(f'{Path(destination).name}: {DURATION}s, mono PCM16, peak {max(map(abs, samples)):.3f}')
 
 
+# --- Take three: the chatter stays, the blade owes us one long release. ---
+# Same engine as take two, two gestures widened: the effortful drag mid-burst,
+# and a finale that finally lets go.
+SCORE_V3 = [
+    (0.60, 0.09, 620, 1150), (0.72, 0.06, 700, 1280), (0.84, 0.12, 580, 1050),
+    (1.60, 0.07, 760, 1340), (1.71, 0.05, 900, 1480),
+    (2.45, 0.42, 520, 980),
+    (3.10, 0.06, 820, 1390), (3.20, 0.05, 700, 1210),
+    (4.05, 0.10, 640, 1170),
+    (4.70, 0.06, 880, 1420), (4.80, 0.08, 750, 1250),
+    (5.55, 0.13, 560, 990),
+    (9.60, 0.10, 700, 1300),
+    (10.45, 0.07, 850, 1450),
+    (11.60, 0.09, 660, 1240),
+    (12.90, 0.06, 940, 1490),
+    (14.10, 0.55, 600, 1150),
+]
+
+
+def render_v3(destination=Path(__file__).with_name('preview-v3.wav')):
+    samples = synthesize_v2(SCORE_V3)
+    pcm = struct.pack('<' + 'h' * len(samples), *(round(x * 32767) for x in samples))
+    with wave.open(str(destination), 'wb') as output:
+        output.setparams((1, 2, RATE, 0, 'NONE', 'not compressed'))
+        output.writeframes(pcm)
+    print(f'{Path(destination).name}: {DURATION}s, mono PCM16, peak {max(map(abs, samples)):.3f}')
+
+
 if __name__ == '__main__':
     import sys
-    render_v2() if '--v2' in sys.argv else render()
+    if '--v3' in sys.argv:
+        render_v3()
+    elif '--v2' in sys.argv:
+        render_v2()
+    else:
+        render()
